@@ -38,3 +38,56 @@
  */
 
 // Your code goes here...
+
+const container = document.querySelector('.cardsContainer');
+const data = { ids: [] }
+
+const LStorage = localStorage.getItem('favorites');
+
+const JSdata = JSON.parse(LStorage);
+
+function addId (id) {
+  if (!JSdata.ids.includes(id)) {
+    JSdata.ids.push(id);
+    localStorage.setItem('favorites', JSON.stringify(JSdata));
+  }
+}
+
+// Removes id but not 4 === '4'
+function removeId (id) {
+  if (JSdata.ids.includes(id)) {
+    JSdata.ids.splice(JSdata.ids.indexOf(id), 1);
+    localStorage.setItem('favorites', JSON.stringify(JSdata));
+  }
+}
+
+function toRed (id) {
+  const item = document.getElementById(`${id}`);
+  item.style.backgroundColor = 'red';
+}
+
+function toWhite (id) {
+  const item = document.getElementById(`${id}`);
+  item.style.backgroundColor = 'white';
+}
+
+const callbackFn = (e) => {
+  const clicked = e.target;
+  if (Array.from(clicked.classList).includes('card')) {
+    if (!JSdata.ids.includes(clicked.id)) {
+      toRed(clicked.id);
+      addId(clicked.id);
+    } else { 
+      toWhite(clicked.id);
+      removeId(clicked.id);
+    }
+  }
+};
+
+container.addEventListener('click', callbackFn);
+
+for (i = 0; i < 5; i++) {
+  if (Array.from(JSdata.ids).includes(`${i + 1}`)) {
+    toRed(`${i + 1}`);
+  }
+}
