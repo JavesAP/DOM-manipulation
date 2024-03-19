@@ -42,9 +42,14 @@
 const container = document.querySelector('.cardsContainer');
 const data = { ids: [] }
 
-const LStorage = localStorage.getItem('favorites');
+let LStorage = localStorage.getItem('favorites');
 
-const JSdata = JSON.parse(LStorage);
+if (LStorage === null) {
+  localStorage.setItem('favorites', JSON.stringify(data));
+  LStorage = localStorage.getItem('favorites');
+}
+
+let JSdata = JSON.parse(LStorage);
 
 function addId (id) {
   if (!JSdata.ids.includes(id)) {
@@ -53,7 +58,6 @@ function addId (id) {
   }
 }
 
-// Removes id but not 4 === '4'
 function removeId (id) {
   if (JSdata.ids.includes(id)) {
     JSdata.ids.splice(JSdata.ids.indexOf(id), 1);
